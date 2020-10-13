@@ -86,18 +86,22 @@ IMPLEMENT_META_INTERFACE(AudioPolicyServiceClient, "android.media.IAudioPolicySe
 status_t BnAudioPolicyServiceClient::onTransact(
     uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
 {
+    LOG(INFO) << "status_t BnAudioPolicyServiceClient::onTransact, code: " << code;
     switch (code) {
     case PORT_LIST_UPDATE: {
+            LOG(INFO) << "PORT_LIST_UPDATE";
             CHECK_INTERFACE(IAudioPolicyServiceClient, data, reply);
             onAudioPortListUpdate();
             return NO_ERROR;
         } break;
     case PATCH_LIST_UPDATE: {
+            LOG(INFO) << "PATCH_LIST_UPDATE";
             CHECK_INTERFACE(IAudioPolicyServiceClient, data, reply);
             onAudioPatchListUpdate();
             return NO_ERROR;
         } break;
     case MIX_STATE_UPDATE: {
+            LOG(INFO) << "MIX_STATE_UPDATE";
             CHECK_INTERFACE(IAudioPolicyServiceClient, data, reply);
             String8 regId = data.readString8();
             int32_t state = data.readInt32();
@@ -105,6 +109,7 @@ status_t BnAudioPolicyServiceClient::onTransact(
             return NO_ERROR;
     }
     case OUTPUT_SESSION_EFFECTS_UPDATE: {
+            LOG(INFO) << "OUTPUT_SESSION_EFFECTS_UPDATE";
             CHECK_INTERFACE(IAudioPolicyServiceClient, data, reply);
             audio_stream_type_t stream = static_cast<audio_stream_type_t>(data.readInt32());
             audio_session_t sessionId = static_cast<audio_session_t>(data.readInt32());

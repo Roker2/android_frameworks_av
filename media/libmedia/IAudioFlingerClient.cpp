@@ -62,8 +62,10 @@ IMPLEMENT_META_INTERFACE(AudioFlingerClient, "android.media.IAudioFlingerClient"
 status_t BnAudioFlingerClient::onTransact(
     uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
 {
+    LOG(INFO) << "status_t BnAudioFlingerClient::onTransact, code: " << code;
     switch (code) {
     case IO_CONFIG_CHANGED: {
+            LOG(INFO) << "IO_CONFIG_CHANGED";
             CHECK_INTERFACE(IAudioFlingerClient, data, reply);
             audio_io_config_event event = (audio_io_config_event)data.readInt32();
             sp<AudioIoDescriptor> ioDesc = new AudioIoDescriptor();

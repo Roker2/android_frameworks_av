@@ -802,8 +802,10 @@ IMPLEMENT_META_INTERFACE(AudioPolicyService, "android.media.IAudioPolicyService"
 status_t BnAudioPolicyService::onTransact(
     uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
 {
+    LOG(INFO) << "status_t BnAudioPolicyService::onTransact, code: " << code;
     switch (code) {
         case SET_DEVICE_CONNECTION_STATE: {
+            LOG(INFO) << "SET_DEVICE_CONNECTION_STATE";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_devices_t device =
                     static_cast <audio_devices_t>(data.readInt32());
@@ -819,6 +821,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case GET_DEVICE_CONNECTION_STATE: {
+            LOG(INFO) << "GET_DEVICE_CONNECTION_STATE";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_devices_t device =
                     static_cast<audio_devices_t> (data.readInt32());
@@ -829,6 +832,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case SET_PHONE_STATE: {
+            LOG(INFO) << "SET_PHONE_STATE";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             reply->writeInt32(static_cast <uint32_t>(setPhoneState(
                     (audio_mode_t) data.readInt32())));
@@ -836,6 +840,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case SET_FORCE_USE: {
+            LOG(INFO) << "SET_FORCE_USE";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_policy_force_use_t usage = static_cast <audio_policy_force_use_t>(
                     data.readInt32());
@@ -846,6 +851,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case GET_FORCE_USE: {
+            LOG(INFO) << "GET_FORCE_USE";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_policy_force_use_t usage = static_cast <audio_policy_force_use_t>(
                     data.readInt32());
@@ -854,6 +860,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case GET_OUTPUT: {
+            LOG(INFO) << "GET_OUTPUT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_stream_type_t stream =
                     static_cast <audio_stream_type_t>(data.readInt32());
@@ -878,6 +885,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case GET_OUTPUT_FOR_ATTR: {
+            LOG(INFO) << "GET_OUTPUT_FOR_ATTR";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_attributes_t attr = {};
             bool hasAttributes = data.readInt32() != 0;
@@ -915,6 +923,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case START_OUTPUT: {
+            LOG(INFO) << "START_OUTPUT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_io_handle_t output = static_cast <audio_io_handle_t>(data.readInt32());
             audio_stream_type_t stream =
@@ -927,6 +936,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case STOP_OUTPUT: {
+            LOG(INFO) << "STOP_OUTPUT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_io_handle_t output = static_cast <audio_io_handle_t>(data.readInt32());
             audio_stream_type_t stream =
@@ -939,6 +949,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case RELEASE_OUTPUT: {
+            LOG(INFO) << "RELEASE_OUTPUT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_io_handle_t output = static_cast <audio_io_handle_t>(data.readInt32());
             audio_stream_type_t stream = (audio_stream_type_t)data.readInt32();
@@ -948,6 +959,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case GET_INPUT_FOR_ATTR: {
+            LOG(INFO) << "GET_INPUT_FOR_ATTR";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_attributes_t attr = {};
             data.read(&attr, sizeof(audio_attributes_t));
@@ -971,6 +983,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case START_INPUT: {
+            LOG(INFO) << "START_INPUT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_io_handle_t input = static_cast <audio_io_handle_t>(data.readInt32());
             audio_session_t session = static_cast <audio_session_t>(data.readInt32());
@@ -979,6 +992,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case STOP_INPUT: {
+            LOG(INFO) << "STOP_INPUT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_io_handle_t input = static_cast <audio_io_handle_t>(data.readInt32());
             audio_session_t session = static_cast <audio_session_t>(data.readInt32());
@@ -987,6 +1001,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case RELEASE_INPUT: {
+            LOG(INFO) << "RELEASE_INPUT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_io_handle_t input = static_cast <audio_io_handle_t>(data.readInt32());
             audio_session_t session = static_cast <audio_session_t>(data.readInt32());
@@ -995,6 +1010,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case INIT_STREAM_VOLUME: {
+            LOG(INFO) << "INIT_STREAM_VOLUME";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_stream_type_t stream =
                     static_cast <audio_stream_type_t>(data.readInt32());
@@ -1005,6 +1021,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case SET_STREAM_VOLUME: {
+            LOG(INFO) << "SET_STREAM_VOLUME";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_stream_type_t stream =
                     static_cast <audio_stream_type_t>(data.readInt32());
@@ -1017,6 +1034,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case GET_STREAM_VOLUME: {
+            LOG(INFO) << "GET_STREAM_VOLUME";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_stream_type_t stream =
                     static_cast <audio_stream_type_t>(data.readInt32());
@@ -1029,6 +1047,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case GET_STRATEGY_FOR_STREAM: {
+            LOG(INFO) << "GET_STRATEGY_FOR_STREAM";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_stream_type_t stream =
                     static_cast <audio_stream_type_t>(data.readInt32());
@@ -1037,6 +1056,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case GET_DEVICES_FOR_STREAM: {
+            LOG(INFO) << "GET_DEVICES_FOR_STREAM";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_stream_type_t stream =
                     static_cast <audio_stream_type_t>(data.readInt32());
@@ -1045,6 +1065,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case GET_OUTPUT_FOR_EFFECT: {
+            LOG(INFO) << "GET_OUTPUT_FOR_EFFECT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             effect_descriptor_t desc = {};
             if (data.read(&desc, sizeof(desc)) != NO_ERROR) {
@@ -1057,6 +1078,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case REGISTER_EFFECT: {
+            LOG(INFO) << "REGISTER_EFFECT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             effect_descriptor_t desc = {};
             if (data.read(&desc, sizeof(desc)) != NO_ERROR) {
@@ -1076,6 +1098,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case UNREGISTER_EFFECT: {
+            LOG(INFO) << "UNREGISTER_EFFECT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             int id = data.readInt32();
             reply->writeInt32(static_cast <int32_t>(unregisterEffect(id)));
@@ -1083,6 +1106,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case SET_EFFECT_ENABLED: {
+            LOG(INFO) << "SET_EFFECT_ENABLED";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             int id = data.readInt32();
             bool enabled = static_cast <bool>(data.readInt32());
@@ -1091,6 +1115,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case IS_STREAM_ACTIVE: {
+            LOG(INFO) << "SET_PHONE_STATE";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_stream_type_t stream = (audio_stream_type_t) data.readInt32();
             uint32_t inPastMs = (uint32_t)data.readInt32();
@@ -1099,6 +1124,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case IS_STREAM_ACTIVE_REMOTELY: {
+            LOG(INFO) << "IS_STREAM_ACTIVE_REMOTELY";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_stream_type_t stream = (audio_stream_type_t) data.readInt32();
             uint32_t inPastMs = (uint32_t)data.readInt32();
@@ -1107,6 +1133,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case IS_SOURCE_ACTIVE: {
+            LOG(INFO) << "SET_PHONE_STATE";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_source_t source = (audio_source_t) data.readInt32();
             reply->writeInt32( isSourceActive(source));
@@ -1114,6 +1141,7 @@ status_t BnAudioPolicyService::onTransact(
         }
 
         case QUERY_DEFAULT_PRE_PROCESSING: {
+            LOG(INFO) << "QUERY_DEFAULT_PRE_PROCESSING";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             int audioSession = data.readInt32();
             uint32_t count = data.readInt32();
@@ -1139,6 +1167,7 @@ status_t BnAudioPolicyService::onTransact(
         }
 
         case IS_OFFLOAD_SUPPORTED: {
+            LOG(INFO) << "IS_OFFLOAD_SUPPORTED";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_offload_info_t info = {};
             data.read(&info, sizeof(audio_offload_info_t));
@@ -1148,6 +1177,7 @@ status_t BnAudioPolicyService::onTransact(
         }
 
         case LIST_AUDIO_PORTS: {
+            LOG(INFO) << "LIST_AUDIO_PORTS";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_port_role_t role = (audio_port_role_t)data.readInt32();
             audio_port_type_t type = (audio_port_type_t)data.readInt32();
@@ -1180,6 +1210,7 @@ status_t BnAudioPolicyService::onTransact(
         }
 
         case GET_AUDIO_PORT: {
+            LOG(INFO) << "GET_AUDIO_PORT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             struct audio_port port = {};
             if (data.read(&port, sizeof(struct audio_port)) != NO_ERROR) {
@@ -1194,6 +1225,7 @@ status_t BnAudioPolicyService::onTransact(
         }
 
         case CREATE_AUDIO_PATCH: {
+            LOG(INFO) << "CREATE_AUDIO_PATCH";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             struct audio_patch patch = {};
             data.read(&patch, sizeof(struct audio_patch));
@@ -1210,6 +1242,7 @@ status_t BnAudioPolicyService::onTransact(
         }
 
         case RELEASE_AUDIO_PATCH: {
+            LOG(INFO) << "RELEASE_AUDIO_PATCH";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_patch_handle_t handle = AUDIO_PATCH_HANDLE_NONE;
             data.read(&handle, sizeof(audio_patch_handle_t));
@@ -1219,6 +1252,7 @@ status_t BnAudioPolicyService::onTransact(
         }
 
         case LIST_AUDIO_PATCHES: {
+            LOG(INFO) << "LIST_AUDIO_PATCHES";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             unsigned int numPatchesReq = data.readInt32();
             if (numPatchesReq > MAX_ITEMS_PER_LIST) {
@@ -1249,6 +1283,7 @@ status_t BnAudioPolicyService::onTransact(
         }
 
         case SET_AUDIO_PORT_CONFIG: {
+            LOG(INFO) << "SET_AUDIO_PORT_CONFIG";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             struct audio_port_config config = {};
             data.read(&config, sizeof(struct audio_port_config));
@@ -1259,6 +1294,7 @@ status_t BnAudioPolicyService::onTransact(
         }
 
         case REGISTER_CLIENT: {
+            LOG(INFO) << "REGISTER_CLIENT";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             sp<IAudioPolicyServiceClient> client = interface_cast<IAudioPolicyServiceClient>(
                     data.readStrongBinder());
@@ -1267,12 +1303,14 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case SET_AUDIO_PORT_CALLBACK_ENABLED: {
+            LOG(INFO) << "SET_AUDIO_PORT_CALLBACK_ENABLED";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             setAudioPortCallbacksEnabled(data.readInt32() == 1);
             return NO_ERROR;
         } break;
 
         case LIST_AUDIO_SESSIONS: {
+            LOG(INFO) << "LIST_AUDIO_SESSIONS";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_stream_type_t streams = (audio_stream_type_t)data.readInt32();
 
@@ -1290,6 +1328,7 @@ status_t BnAudioPolicyService::onTransact(
         }
 
         case ACQUIRE_SOUNDTRIGGER_SESSION: {
+            LOG(INFO) << "ACQUIRE_SOUNDTRIGGER_SESSION";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             sp<IAudioPolicyServiceClient> client = interface_cast<IAudioPolicyServiceClient>(
                     data.readStrongBinder());
@@ -1307,6 +1346,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case RELEASE_SOUNDTRIGGER_SESSION: {
+            LOG(INFO) << "RELEASE_SOUNDTRIGGER_SESSION";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             sp<IAudioPolicyServiceClient> client = interface_cast<IAudioPolicyServiceClient>(
                     data.readStrongBinder());
@@ -1317,12 +1357,14 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case GET_PHONE_STATE: {
+            LOG(INFO) << "GET_PHONE_STATE";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             reply->writeInt32((int32_t)getPhoneState());
             return NO_ERROR;
         } break;
 
         case REGISTER_POLICY_MIXES: {
+            LOG(INFO) << "REGISTER_POLICY_MIXES";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             bool registration = data.readInt32() == 1;
             Vector<AudioMix> mixes;
@@ -1342,6 +1384,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case START_AUDIO_SOURCE: {
+            LOG(INFO) << "START_AUDIO_SOURCE";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             struct audio_port_config source = {};
             data.read(&source, sizeof(struct audio_port_config));
@@ -1357,6 +1400,7 @@ status_t BnAudioPolicyService::onTransact(
         } break;
 
         case STOP_AUDIO_SOURCE: {
+            LOG(INFO) << "STOP_AUDIO_SOURCE";
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_io_handle_t handle = (audio_io_handle_t)data.readInt32();
             status_t status = stopAudioSource(handle);

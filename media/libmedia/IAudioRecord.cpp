@@ -16,7 +16,7 @@
 */
 
 #define LOG_TAG "IAudioRecord"
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #include <utils/Log.h>
 
 #include <stdint.h>
@@ -44,6 +44,7 @@ public:
 
     virtual status_t start(int /*AudioSystem::sync_event_t*/ event, int triggerSession)
     {
+        ALOGI("virtual status_t start");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioRecord::getInterfaceDescriptor());
         data.writeInt32(event);
@@ -59,6 +60,7 @@ public:
 
     virtual void stop()
     {
+        ALOGI("virtual void stop");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioRecord::getInterfaceDescriptor());
         remote()->transact(STOP, data, &reply);
@@ -73,8 +75,10 @@ IMPLEMENT_META_INTERFACE(AudioRecord, "android.media.IAudioRecord");
 status_t BnAudioRecord::onTransact(
     uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
 {
+    ALOGI("status_t BnAudioRecord::onTransact");
     switch (code) {
         case START: {
+            ALOGI("START");
             CHECK_INTERFACE(IAudioRecord, data, reply);
             int /*AudioSystem::sync_event_t*/ event = data.readInt32();
             int triggerSession = data.readInt32();
@@ -82,6 +86,7 @@ status_t BnAudioRecord::onTransact(
             return NO_ERROR;
         } break;
         case STOP: {
+            ALOGI("STOP");
             CHECK_INTERFACE(IAudioRecord, data, reply);
             stop();
             return NO_ERROR;

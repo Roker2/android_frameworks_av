@@ -54,6 +54,7 @@ public:
 
     virtual sp<IMemory> getCblk() const
     {
+        ALOGI("virtual sp<IMemory> getCblk");
         Parcel data, reply;
         sp<IMemory> cblk;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
@@ -69,6 +70,7 @@ public:
 
     virtual status_t start()
     {
+        ALOGI("virtual status_t start");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         status_t status = remote()->transact(START, data, &reply);
@@ -82,6 +84,7 @@ public:
 
     virtual void stop()
     {
+        ALOGI("virtual void stop");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         remote()->transact(STOP, data, &reply);
@@ -89,6 +92,7 @@ public:
 
     virtual void flush()
     {
+        ALOGI("virtual void flush");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         remote()->transact(FLUSH, data, &reply);
@@ -96,6 +100,7 @@ public:
 
     virtual void pause()
     {
+        ALOGI("virtual void pause");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         remote()->transact(PAUSE, data, &reply);
@@ -103,6 +108,7 @@ public:
 
     virtual status_t attachAuxEffect(int effectId)
     {
+        ALOGI("virtual status_t attachAuxEffect");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         data.writeInt32(effectId);
@@ -116,6 +122,7 @@ public:
     }
 
     virtual status_t allocateTimedBuffer(size_t size, sp<IMemory>* buffer) {
+        ALOGI("virtual status_t allocateTimedBuffer");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         data.writeInt64(size);
@@ -135,6 +142,7 @@ public:
 
     virtual status_t queueTimedBuffer(const sp<IMemory>& buffer,
                                       int64_t pts) {
+        ALOGI("virtual status_t queueTimedBuffer");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         data.writeStrongBinder(IInterface::asBinder(buffer));
@@ -149,6 +157,7 @@ public:
 
     virtual status_t setMediaTimeTransform(const LinearTransform& xform,
                                            int target) {
+        ALOGI("virtual status_t setMediaTimeTransform");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         data.writeInt64(xform.a_zero);
@@ -165,6 +174,7 @@ public:
     }
 
     virtual status_t setParameters(const String8& keyValuePairs) {
+        ALOGI("virtual status_t setParameters");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         data.writeString8(keyValuePairs);
@@ -176,6 +186,7 @@ public:
     }
 
     virtual status_t getTimestamp(AudioTimestamp& timestamp) {
+        ALOGI("virtual status_t getTimestamp");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         status_t status = remote()->transact(GET_TIMESTAMP, data, &reply);
@@ -191,6 +202,7 @@ public:
     }
 
     virtual void signal() {
+        ALOGI("virtual void signal");
         Parcel data, reply;
         data.writeInterfaceToken(IAudioTrack::getInterfaceDescriptor());
         remote()->transact(SIGNAL, data, &reply);
@@ -204,38 +216,46 @@ IMPLEMENT_META_INTERFACE(AudioTrack, "android.media.IAudioTrack");
 status_t BnAudioTrack::onTransact(
     uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
 {
+    ALOGI("status_t BnAudioTrack::onTransact");
     switch (code) {
         case GET_CBLK: {
+            ALOGI("status_t BnAudioTrack::onTransact, GET_CBLK");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             reply->writeStrongBinder(IInterface::asBinder(getCblk()));
             return NO_ERROR;
         } break;
         case START: {
+            ALOGI("status_t BnAudioTrack::onTransact, START");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             reply->writeInt32(start());
             return NO_ERROR;
         } break;
         case STOP: {
+            ALOGI("status_t BnAudioTrack::onTransact, STOP");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             stop();
             return NO_ERROR;
         } break;
         case FLUSH: {
+            ALOGI("status_t BnAudioTrack::onTransact, FLUSH");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             flush();
             return NO_ERROR;
         } break;
         case PAUSE: {
+            ALOGI("status_t BnAudioTrack::onTransact, PAUSE");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             pause();
             return NO_ERROR;
         }
         case ATTACH_AUX_EFFECT: {
+            ALOGI("status_t BnAudioTrack::onTransact, ATTACH_AUX_EFFECT");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             reply->writeInt32(attachAuxEffect(data.readInt32()));
             return NO_ERROR;
         } break;
         case ALLOCATE_TIMED_BUFFER: {
+            ALOGI("status_t BnAudioTrack::onTransact, ALLOCATE_TIMED_BUFFER");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             sp<IMemory> buffer;
             status_t status = allocateTimedBuffer(data.readInt64(), &buffer);
@@ -246,6 +266,7 @@ status_t BnAudioTrack::onTransact(
             return NO_ERROR;
         } break;
         case QUEUE_TIMED_BUFFER: {
+            ALOGI("status_t BnAudioTrack::onTransact, QUEUE_TIMED_BUFFER");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             sp<IMemory> buffer = interface_cast<IMemory>(
                 data.readStrongBinder());
@@ -254,6 +275,7 @@ status_t BnAudioTrack::onTransact(
             return NO_ERROR;
         } break;
         case SET_MEDIA_TIME_TRANSFORM: {
+            ALOGI("status_t BnAudioTrack::onTransact, SET_MEDIA_TIME_TRANSFORM");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             LinearTransform xform;
             xform.a_zero = data.readInt64();
@@ -265,12 +287,14 @@ status_t BnAudioTrack::onTransact(
             return NO_ERROR;
         } break;
         case SET_PARAMETERS: {
+            ALOGI("status_t BnAudioTrack::onTransact, SET_PARAMETERS");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             String8 keyValuePairs(data.readString8());
             reply->writeInt32(setParameters(keyValuePairs));
             return NO_ERROR;
         } break;
         case GET_TIMESTAMP: {
+            ALOGI("status_t BnAudioTrack::onTransact, GET_TIMESTAMP");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             AudioTimestamp timestamp;
             status_t status = getTimestamp(timestamp);
@@ -283,6 +307,7 @@ status_t BnAudioTrack::onTransact(
             return NO_ERROR;
         } break;
         case SIGNAL: {
+            ALOGI("status_t BnAudioTrack::onTransact, SIGNAL");
             CHECK_INTERFACE(IAudioTrack, data, reply);
             signal();
             return NO_ERROR;

@@ -148,6 +148,7 @@ status_t AudioRecord::set(
         pid_t pid,
         const audio_attributes_t* pAttributes)
 {
+    ALOGI("status_t AudioRecord::set");
     ALOGV("set(): inputSource %d, sampleRate %u, format %#x, channelMask %#x, frameCount %zu, "
           "notificationFrames %u, sessionId %d, transferType %d, flags %#x, opPackageName %s "
           "uid %d, pid %d",
@@ -156,6 +157,7 @@ status_t AudioRecord::set(
 
     switch (transferType) {
     case TRANSFER_DEFAULT:
+        ALOGI("TRANSFER_DEFAULT");
         if (cbf == NULL || threadCanCallJava) {
             transferType = TRANSFER_SYNC;
         } else {
@@ -163,13 +165,16 @@ status_t AudioRecord::set(
         }
         break;
     case TRANSFER_CALLBACK:
+        ALOGI("TRANSFER_CALLBACK");
         if (cbf == NULL) {
             ALOGE("Transfer type TRANSFER_CALLBACK but cbf == NULL");
             return BAD_VALUE;
         }
         break;
     case TRANSFER_OBTAIN:
+        ALOGI("TRANSFER_OBTAIN");
     case TRANSFER_SYNC:
+        ALOGI("TRANSFER_OBTAIN");
         break;
     default:
         ALOGE("Invalid transfer type %d", transferType);
@@ -298,6 +303,7 @@ status_t AudioRecord::set(
 
 status_t AudioRecord::start(AudioSystem::sync_event_t event, int triggerSession)
 {
+    ALOGI("status_t AudioRecord::start");
     ALOGV("start, sync event %d trigger session %d", event, triggerSession);
     SEEMPLOG_RECORD(71,"");
 
@@ -347,6 +353,7 @@ status_t AudioRecord::start(AudioSystem::sync_event_t event, int triggerSession)
 
 void AudioRecord::stop()
 {
+    ALOGI("void AudioRecord::stop");
     AutoMutex lock(mLock);
     if (!mActive) {
         return;
@@ -369,12 +376,14 @@ void AudioRecord::stop()
 
 bool AudioRecord::stopped() const
 {
+    ALOGI("bool AudioRecord::stopped");
     AutoMutex lock(mLock);
     return !mActive;
 }
 
 status_t AudioRecord::setMarkerPosition(uint32_t marker)
 {
+    ALOGI("status_t AudioRecord::setMarkerPosition");
     // The only purpose of setting marker position is to get a callback
     if (mCbf == NULL) {
         return INVALID_OPERATION;
@@ -393,6 +402,7 @@ status_t AudioRecord::setMarkerPosition(uint32_t marker)
 
 status_t AudioRecord::getMarkerPosition(uint32_t *marker) const
 {
+    ALOGI("status_t AudioRecord::getMarkerPosition");
     if (marker == NULL) {
         return BAD_VALUE;
     }
@@ -405,6 +415,7 @@ status_t AudioRecord::getMarkerPosition(uint32_t *marker) const
 
 status_t AudioRecord::setPositionUpdatePeriod(uint32_t updatePeriod)
 {
+    ALOGI("status_t AudioRecord::setPositionUpdatePeriod");
     // The only purpose of setting position update period is to get a callback
     if (mCbf == NULL) {
         return INVALID_OPERATION;
@@ -423,6 +434,7 @@ status_t AudioRecord::setPositionUpdatePeriod(uint32_t updatePeriod)
 
 status_t AudioRecord::getPositionUpdatePeriod(uint32_t *updatePeriod) const
 {
+    ALOGI("status_t AudioRecord::getPositionUpdatePeriod");
     if (updatePeriod == NULL) {
         return BAD_VALUE;
     }
@@ -435,6 +447,7 @@ status_t AudioRecord::getPositionUpdatePeriod(uint32_t *updatePeriod) const
 
 status_t AudioRecord::getPosition(uint32_t *position) const
 {
+    ALOGI("status_t AudioRecord::getPosition");
     if (position == NULL) {
         return BAD_VALUE;
     }
@@ -447,12 +460,14 @@ status_t AudioRecord::getPosition(uint32_t *position) const
 
 uint32_t AudioRecord::getInputFramesLost() const
 {
+    ALOGI("uint32_t AudioRecord::getInputFramesLost");
     // no need to check mActive, because if inactive this will return 0, which is what we want
     return AudioSystem::getInputFramesLost(getInputPrivate());
 }
 
 // ---- Explicit Routing ---------------------------------------------------
 status_t AudioRecord::setInputDevice(audio_port_handle_t deviceId) {
+    ALOGI("status_t AudioRecord::setInputDevice");
     AutoMutex lock(mLock);
     if (mSelectedDeviceId != deviceId) {
         mSelectedDeviceId = deviceId;
@@ -467,11 +482,13 @@ status_t AudioRecord::setInputDevice(audio_port_handle_t deviceId) {
 }
 
 audio_port_handle_t AudioRecord::getInputDevice() {
+    ALOGI("audio_port_handle_t AudioRecord::getInputDevice");
     AutoMutex lock(mLock);
     return mSelectedDeviceId;
 }
 
 audio_port_handle_t AudioRecord::getRoutedDeviceId() {
+    ALOGI("audio_port_handle_t AudioRecord::getRoutedDeviceId");
     AutoMutex lock(mLock);
     if (mInput == AUDIO_IO_HANDLE_NONE) {
         return AUDIO_PORT_HANDLE_NONE;
@@ -484,6 +501,7 @@ audio_port_handle_t AudioRecord::getRoutedDeviceId() {
 // must be called with mLock held
 status_t AudioRecord::openRecord_l(size_t epoch, const String16& opPackageName)
 {
+    ALOGI("status_t AudioRecord::openRecord_l");
     const sp<IAudioFlinger>& audioFlinger = AudioSystem::get_audio_flinger();
     if (audioFlinger == 0) {
         ALOGE("Could not get audioflinger");
@@ -675,6 +693,7 @@ release:
 
 status_t AudioRecord::obtainBuffer(Buffer* audioBuffer, int32_t waitCount, size_t *nonContig)
 {
+    ALOGI("status_t AudioRecord::obtainBuffer 1");
     if (audioBuffer == NULL) {
         if (nonContig != NULL) {
             *nonContig = 0;
@@ -712,6 +731,7 @@ status_t AudioRecord::obtainBuffer(Buffer* audioBuffer, int32_t waitCount, size_
 status_t AudioRecord::obtainBuffer(Buffer* audioBuffer, const struct timespec *requested,
         struct timespec *elapsed, size_t *nonContig)
 {
+    ALOGI("status_t AudioRecord::obtainBuffer 2");
     // previous and new IAudioRecord sequence numbers are used to detect track re-creation
     uint32_t oldSequence = 0;
     uint32_t newSequence;
@@ -777,6 +797,7 @@ status_t AudioRecord::obtainBuffer(Buffer* audioBuffer, const struct timespec *r
 
 void AudioRecord::releaseBuffer(const Buffer* audioBuffer)
 {
+    ALOGI("void AudioRecord::releaseBuffer");
     // FIXME add error checking on mode, by adding an internal version
 
     size_t stepCount = audioBuffer->size / mFrameSize;
@@ -797,6 +818,7 @@ void AudioRecord::releaseBuffer(const Buffer* audioBuffer)
 
 audio_io_handle_t AudioRecord::getInputPrivate() const
 {
+    ALOGI("audio_io_handle_t AudioRecord::getInputPrivate");
     AutoMutex lock(mLock);
     return mInput;
 }
@@ -805,6 +827,7 @@ audio_io_handle_t AudioRecord::getInputPrivate() const
 
 ssize_t AudioRecord::read(void* buffer, size_t userSize, bool blocking)
 {
+    ALOGI("ssize_t AudioRecord::read");
     if (mTransfer != TRANSFER_SYNC) {
         return INVALID_OPERATION;
     }
@@ -847,6 +870,7 @@ ssize_t AudioRecord::read(void* buffer, size_t userSize, bool blocking)
 
 nsecs_t AudioRecord::processAudioBuffer()
 {
+    ALOGI("nsecs_t AudioRecord::processAudioBuffer");
     mLock.lock();
     if (mAwaitBoost) {
         mAwaitBoost = false;
@@ -1083,6 +1107,7 @@ nsecs_t AudioRecord::processAudioBuffer()
 
 status_t AudioRecord::restoreRecord_l(const char *from)
 {
+    ALOGI("status_t AudioRecord::restoreRecord_l");
     ALOGW("dead IAudioRecord, creating a new one from %s()", from);
     ++mSequence;
 
@@ -1109,6 +1134,7 @@ status_t AudioRecord::restoreRecord_l(const char *from)
 
 status_t AudioRecord::addAudioDeviceCallback(const sp<AudioSystem::AudioDeviceCallback>& callback)
 {
+    ALOGI("status_t AudioRecord::addAudioDeviceCallback");
     if (callback == 0) {
         ALOGW("%s adding NULL callback!", __FUNCTION__);
         return BAD_VALUE;
@@ -1133,6 +1159,7 @@ status_t AudioRecord::addAudioDeviceCallback(const sp<AudioSystem::AudioDeviceCa
 status_t AudioRecord::removeAudioDeviceCallback(
         const sp<AudioSystem::AudioDeviceCallback>& callback)
 {
+    ALOGI("status_t AudioRecord::removeAudioDeviceCallback");
     if (callback == 0) {
         ALOGW("%s removing NULL callback!", __FUNCTION__);
         return BAD_VALUE;
@@ -1153,6 +1180,7 @@ status_t AudioRecord::removeAudioDeviceCallback(
 
 void AudioRecord::DeathNotifier::binderDied(const wp<IBinder>& who __unused)
 {
+    ALOGI("status_t AudioRecord::DeathNotifier::binderDied");
     sp<AudioRecord> audioRecord = mAudioRecord.promote();
     if (audioRecord != 0) {
         AutoMutex lock(audioRecord->mLock);
@@ -1166,14 +1194,17 @@ AudioRecord::AudioRecordThread::AudioRecordThread(AudioRecord& receiver, bool bC
     : Thread(bCanCallJava), mReceiver(receiver), mPaused(true), mPausedInt(false), mPausedNs(0LL),
       mIgnoreNextPausedInt(false)
 {
+    ALOGI("AudioRecord::AudioRecordThread::AudioRecordThread, IDK function");
 }
 
 AudioRecord::AudioRecordThread::~AudioRecordThread()
 {
+    ALOGI("AudioRecord::AudioRecordThread::~AudioRecordThread, IDK function");
 }
 
 bool AudioRecord::AudioRecordThread::threadLoop()
 {
+    ALOGI("bool AudioRecord::AudioRecordThread::threadLoop");
     {
         AutoMutex _l(mMyLock);
         if (mPaused) {
@@ -1217,6 +1248,7 @@ bool AudioRecord::AudioRecordThread::threadLoop()
 
 void AudioRecord::AudioRecordThread::requestExit()
 {
+    ALOGI("void AudioRecord::AudioRecordThread::requestExit");
     // must be in this order to avoid a race condition
     Thread::requestExit();
     resume();
@@ -1224,12 +1256,14 @@ void AudioRecord::AudioRecordThread::requestExit()
 
 void AudioRecord::AudioRecordThread::pause()
 {
+    ALOGI("void AudioRecord::AudioRecordThread::pause");
     AutoMutex _l(mMyLock);
     mPaused = true;
 }
 
 void AudioRecord::AudioRecordThread::resume()
 {
+    ALOGI("void AudioRecord::AudioRecordThread::resume");
     AutoMutex _l(mMyLock);
     mIgnoreNextPausedInt = true;
     if (mPaused || mPausedInt) {
@@ -1241,6 +1275,7 @@ void AudioRecord::AudioRecordThread::resume()
 
 void AudioRecord::AudioRecordThread::wake()
 {
+    ALOGI("void AudioRecord::AudioRecordThread::wake");
     AutoMutex _l(mMyLock);
     if (!mPaused) {
         // wake() might be called while servicing a callback - ignore the next
@@ -1256,6 +1291,7 @@ void AudioRecord::AudioRecordThread::wake()
 
 void AudioRecord::AudioRecordThread::pauseInternal(nsecs_t ns)
 {
+    ALOGI("void AudioRecord::AudioRecordThread::pauseInternal");
     AutoMutex _l(mMyLock);
     mPausedInt = true;
     mPausedNs = ns;
